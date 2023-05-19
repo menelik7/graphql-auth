@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: './client/index.js',
+  devtool: 'eval-source-map',
   mode: 'development',
   output: {
     path: '/',
@@ -19,7 +20,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'client/index.html',
+      template: 'client/public/index.html',
     }),
   ],
 };
