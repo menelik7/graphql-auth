@@ -28,8 +28,13 @@ const mutation = new GraphQLObjectType({
         email: { type: GraphQLString },
         password: { type: GraphQLString },
       },
-      resolve(parentValue, { email, password }, req) {
-        return AuthService.login({ email, password, req });
+      async resolve(parentValue, { email, password }, req) {
+        try {
+          const response = await AuthService.login({ email, password, req });
+          return response;
+        } catch (err) {
+          return err;
+        }
       },
     },
   },
