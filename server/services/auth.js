@@ -6,18 +6,20 @@ const User = mongoose.model('user');
 
 // SerializeUser is used to provide some identifying token that can be saved
 // in the users session.  We traditionally use the 'ID' for this.
-passport.serializeUser((user, done) => {
-  done(null, user.id);
+passport.serializeUser(function (user, cb) {
+  process.nextTick(function () {
+    return cb(null, user.id);
+  });
 });
 
 // The counterpart of 'serializeUser'.  Given only a user's ID, we must return
 // the user object.  This object is placed on 'req.user'.
-passport.deserializeUser(async (id, done) => {
+passport.deserializeUser(async (id, cb) => {
   try {
     const user = await User.findById(id);
-    done(null, user);
+    cb(null, user);
   } catch (err) {
-    done(err);
+    cb(err);
   }
 });
 
@@ -30,34 +32,27 @@ passport.deserializeUser(async (id, done) => {
 // callback, including a string that messages why the authentication process failed.
 // This string is provided back to the GraphQL client.
 passport.use(
-  new LocalStrategy(
-    { usernameField: 'email' },
-    async (email, password, done) => {
-      try {
-        const user = await User.findOne({ email: email.toLowerCase() });
-        if (!user) {
-          return done(null, false, {
-            message: 'Incorrect username or password.',
-          });
+  new LocalStrategy({ usernameField: 'email' }, async (email, password, cb) => {
+    try {
+      const user = await User.findOne({ email: email.toLowerCase() });
+      if (!user) {
+        return cb(null, false, { message: 'Incorrect email or password.' });
+      }
+
+      user.comparePassword(password, (err, isMatch) => {
+        if (err) {
+          return cb(err);
+        }
+        if (isMatch) {
+          return cb(null, user);
         }
 
-        user.comparePassword(password, (err, isMatch) => {
-          if (err) {
-            return done(err);
-          }
-          if (isMatch) {
-            return done(null, user);
-          }
-
-          return done(null, false, {
-            message: 'Incorrect username or password.',
-          });
-        });
-      } catch (err) {
-        return done(err);
-      }
+        return cb(null, false, { message: 'Incorrect email or password.' });
+      });
+    } catch (err) {
+      return cb(err);
     }
-  )
+  })
 );
 
 // Creates a new user account.  We first check to see if a user already exists
@@ -98,20 +93,19 @@ function signup({ email, password, req }) {
 // Express.  We have another compatibility layer here to make it work nicely with
 // GraphQL, as GraphQL always expects to see a promise for handling async code.
 function login({ email, password, req }) {
-  return new Promise((reject, resolve) => {
+  return new Promise((resolve, reject) => {
     passport.authenticate('local', (err, user) => {
       if (err) {
         reject(err);
       }
       if (!user) {
-        reject('Invalid email or password');
+        reject('Invalid credentials.');
       }
 
       req.logIn(user, (err) => {
         if (err) {
           reject(err);
         }
-        console.log('User', user);
         resolve(user);
       });
     })({ body: { email, password } });
