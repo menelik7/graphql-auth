@@ -6,14 +6,13 @@ import mutation from '../mutations/logout';
 
 export default function Header() {
   const { loading, error, data } = useQuery(query);
-  const [logout, { loading: processingLogout, error: logoutError }] =
-    useMutation(mutation, {
-      refetchQueries: [{ query }],
-    });
+  const [logout] = useMutation(mutation, {
+    refetchQueries: [{ query }],
+  });
   const navigate = useNavigate();
 
-  if (loading || processingLogout) return;
-  if (error || logoutError) return <p>Error: {error}</p>;
+  if (loading) return <div>Loading...</div>;
+  if (error) return <p>Error: {error}</p>;
 
   const onLogout = () => {
     logout().then(() => navigate('/'));

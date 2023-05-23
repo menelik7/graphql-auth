@@ -27,5 +27,9 @@ export default function App() {
     },
   ]);
 
-  return <RouterProvider router={router} />;
+  return (
+    <div className='container'>
+      <RouterProvider router={router} />
+    </div>
+  );
 }
