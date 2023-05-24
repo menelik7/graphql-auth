@@ -15,14 +15,14 @@ export default function Header() {
   if (error) return <p>Error: {error}</p>;
 
   const onLogout = () => {
-    logout().then(() => navigate('/'));
+    logout().then(() => navigate('/login'));
   };
 
   const { user } = data;
   const renderButtons = user ? (
     <div onClick={onLogout}>
       <li>
-        <Link to='/'>Logout</Link>
+        <Link to='dashboard'>Logout</Link>
       </li>
     </div>
   ) : (

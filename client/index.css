@@ -3,3 +3,22 @@
   align-items: center;
   justify-content: space-between;
 }
+
+.error {
+  color: red;
+  margin-bottom: 10px;
+  /* min-height: 22px; */
+}
+
+.error-label {
+  color: red !important;
+}
+
+.btn {
+  min-width: 88px;
+}
+
+.user-email {
+  margin-left: 5px;
+  font-weight: 700;
+}

@@ -4,6 +4,7 @@ import Header from './Header';
 import Landing from './Landing';
 import Signup from './Signup';
 import Login from './Login';
+import Dashboard from './Dashboard';
 
 export default function App() {
   const router = createHashRouter([
@@ -16,12 +17,16 @@ export default function App() {
           element: <Landing />,
         },
         {
-          path: '/signup',
+          path: 'signup',
           element: <Signup />,
         },
         {
           path: 'login',
           element: <Login />,
+        },
+        {
+          path: 'dashboard',
+          element: <Dashboard />,
         },
       ],
     },

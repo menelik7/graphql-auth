@@ -62,16 +62,16 @@ passport.use(
 // Notice the Promise created in the second 'then' statement.  This is done
 // because Passport only supports callbacks, while GraphQL only supports promises
 // for async code!  Awkward!
-function signup({ email, password, req }) {
-  const user = new User({ email, password });
-  if (!email || !password) {
+async function signup({ username, email, password, req }) {
+  const user = await new User({ username, email, password });
+  if (!username || !email || !password) {
     throw new Error('You must provide an email and password.');
   }
 
   return User.findOne({ email })
     .then((existingUser) => {
       if (existingUser) {
-        throw new Error('Email in use');
+        throw new Error('The email you provided is already in use.');
       }
       return user.save();
     })
@@ -95,11 +95,15 @@ function signup({ email, password, req }) {
 function login({ email, password, req }) {
   return new Promise((resolve, reject) => {
     passport.authenticate('local', (err, user) => {
+      if (!email || !password) {
+        console.log('Issue');
+        reject('You must provide an email and password.');
+      }
       if (err) {
         reject(err);
       }
       if (!user) {
-        reject('Invalid credentials.');
+        reject('Invalid credentials');
       }
 
       req.logIn(user, (err) => {
