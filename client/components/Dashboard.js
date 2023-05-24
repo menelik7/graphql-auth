@@ -9,14 +9,13 @@ export default function Dashboard() {
   if (error) return <p>Error: {error}</p>;
 
   const { user } = data;
-  const { username } = user;
 
   return (
     <div>
       <h4>Dashboard</h4>
       <p>
         Welcome
-        <span className='user-email'>{username}</span>
+        <span className='user-email'>{user?.username}</span>
       </p>
     </div>
   );

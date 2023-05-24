@@ -63,28 +63,30 @@ passport.use(
 // because Passport only supports callbacks, while GraphQL only supports promises
 // for async code!  Awkward!
 async function signup({ username, email, password, req }) {
-  const user = await new User({ username, email, password });
-  if (!username || !email || !password) {
-    throw new Error('You must provide an email and password.');
-  }
-
-  return User.findOne({ email })
-    .then((existingUser) => {
-      if (existingUser) {
-        throw new Error('The email you provided is already in use.');
-      }
-      return user.save();
-    })
-    .then((user) => {
-      return new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
+    if (!username || !email || !password)
+      reject('You must provide a username, email, and password.');
+    const user = new User({ username, email, password });
+    user
+      .save()
+      .then((user) => {
         req.logIn(user, (err) => {
           if (err) {
             reject(err);
           }
           resolve(user);
         });
+      })
+      .catch(({ keyValue }) => {
+        let errorMessage;
+        for (let entry of Object.entries(keyValue)) {
+          const [key, value] = entry;
+          errorMessage = `The ${key} "${value}" is already in use. Please choose a different one.`;
+        }
+
+        reject(errorMessage);
       });
-    });
+  });
 }
 
 // Logs in a user.  This will invoke the 'local-strategy' defined above in this

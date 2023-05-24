@@ -37,7 +37,7 @@ export default function AuthForm({
               onChange={(e) => setUsername(e.target.value)}
             />
             <label
-              className={errors.length ? 'error-label' : ''}
+              className={errors.length ? 'active error-label' : ''}
               htmlFor='username'
             >
               Username
@@ -52,7 +52,10 @@ export default function AuthForm({
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <label className={errors.length ? 'error-label' : ''} htmlFor='email'>
+          <label
+            className={errors.length ? 'active error-label' : ''}
+            htmlFor='email'
+          >
             Email
           </label>
         </div>
@@ -65,7 +68,7 @@ export default function AuthForm({
             onChange={(e) => setPassword(e.target.value)}
           />
           <label
-            className={errors.length ? 'error-label' : ''}
+            className={errors.length ? 'active error-label' : ''}
             htmlFor='password'
           >
             Password
