@@ -62,29 +62,43 @@ passport.use(
 // Notice the Promise created in the second 'then' statement.  This is done
 // because Passport only supports callbacks, while GraphQL only supports promises
 // for async code!  Awkward!
-async function signup({ username, email, password, req }) {
+function signup({ username, email, password, req }) {
   return new Promise((resolve, reject) => {
-    if (!username || !email || !password)
-      reject('You must provide a username, email, and password.');
+    if (!username || !email || !password) {
+      reject('Please provide a username, email, and password.');
+      return;
+    }
     const user = new User({ username, email, password });
     user
       .save()
       .then((user) => {
-        req.logIn(user, (err) => {
-          if (err) {
-            reject(err);
-          }
-          resolve(user);
-        });
+        req.logIn(user, () => resolve(user));
       })
-      .catch(({ keyValue }) => {
-        let errorMessage;
-        for (let entry of Object.entries(keyValue)) {
-          const [key, value] = entry;
-          errorMessage = `The ${key} "${value}" is already in use. Please choose a different one.`;
+      .catch((err) => {
+        // Mongo errors
+        const { errors } = err;
+        if (errors) {
+          for (let entry of Object.entries(err.errors)) {
+            const { message } = entry[1].properties;
+            reject(message);
+            return;
+          }
         }
 
-        reject(errorMessage);
+        const { keyValue } = err;
+        if (keyValue) {
+          let errorMessage;
+          for (let entry of Object.entries(keyValue)) {
+            const [key, value] = entry;
+            errorMessage = `The ${key} "${value}" is already in use. Please choose a different one.`;
+          }
+
+          reject(errorMessage);
+          return;
+        }
+
+        // All others
+        return err;
       });
   });
 }
