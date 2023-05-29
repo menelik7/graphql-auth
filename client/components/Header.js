@@ -1,25 +1,22 @@
-import React from 'react';
-import { useQuery, useMutation } from '@apollo/client';
+import React, { useContext } from 'react';
+import UserContext from '../context/user';
+import { useMutation } from '@apollo/client';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
-import query from '../queries/CurrentUser';
 import mutation from '../mutations/logout';
 
 export default function Header() {
-  const { loading, error, data } = useQuery(query);
-  const [logout] = useMutation(mutation, {
-    refetchQueries: [{ query }],
-  });
+  const [logout] = useMutation(mutation);
   const navigate = useNavigate();
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <p>Error: {error}</p>;
+  const { currentUser, updateCurrentUserInfo } = useContext(UserContext);
 
   const onLogout = () => {
-    logout().then(() => navigate('/login'));
+    logout().then(() => {
+      updateCurrentUserInfo(null);
+      navigate('/login');
+    });
   };
 
-  const { user } = data;
-  const renderButtons = user ? (
+  const renderButtons = currentUser ? (
     <div onClick={onLogout}>
       <li>
         <Link to='dashboard'>Logout</Link>
@@ -43,6 +40,9 @@ export default function Header() {
           <ul>
             <li>
               <Link to='/'>Home</Link>
+            </li>
+            <li>
+              <Link to='dashboard'>Dashboard</Link>
             </li>
           </ul>
           <ul className='right'>{renderButtons}</ul>

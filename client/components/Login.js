@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import UserContext from '../context/user';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import query from '../queries/CurrentUser';
@@ -7,9 +8,11 @@ import AuthForm from './AuthForm';
 
 export default function Login() {
   const [errors, setErrors] = useState([]);
+  const { updateCurrentUserInfo } = useContext(UserContext);
   const [login, { loading }] = useMutation(mutation, {
     refetchQueries: [{ query }],
   });
+
   const navigate = useNavigate();
 
   const onSubmit = (email, password) => {
@@ -19,7 +22,9 @@ export default function Login() {
         password,
       },
     })
-      .then(() => {
+      .then((user) => {
+        const { data } = user;
+        updateCurrentUserInfo(data.login);
         setErrors([]);
         navigate('/dashboard');
       })

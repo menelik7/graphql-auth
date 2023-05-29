@@ -44,6 +44,7 @@ passport.use(
           return cb(err);
         }
         if (isMatch) {
+          console.log('From passport', user);
           return cb(null, user);
         }
 
@@ -108,11 +109,10 @@ function signup({ username, email, password, req }) {
 // function returns a function, as its indended to be used as a middleware with
 // Express.  We have another compatibility layer here to make it work nicely with
 // GraphQL, as GraphQL always expects to see a promise for handling async code.
-function login({ email, password, req }) {
+async function login({ email, password, req }) {
   return new Promise((resolve, reject) => {
     passport.authenticate('local', (err, user) => {
       if (!email || !password) {
-        console.log('Issue');
         reject('You must provide an email and password.');
       }
       if (err) {

@@ -5,6 +5,7 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import keys from '../config/keys';
 
 import App from './components/App';
+import { Provider } from './context/user';
 
 const client = new ApolloClient({
   dataIdFromObject: (o) => o.id,
@@ -16,6 +17,8 @@ const root = createRoot(el);
 
 root.render(
   <ApolloProvider client={client}>
-    <App />
+    <Provider>
+      <App />
+    </Provider>
   </ApolloProvider>
 );

@@ -1,22 +1,26 @@
-import React from 'react';
-import { useQuery } from '@apollo/client';
-import query from '../queries/CurrentUser';
+import React, { useContext } from 'react';
+import UserContext from '../context/user';
+import { Link } from 'react-router-dom';
 
 export default function Dashboard() {
-  const { loading, error, data } = useQuery(query);
+  const { currentUser } = useContext(UserContext);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
-
-  const { user } = data;
+  const renderContent = currentUser ? (
+    <p>
+      Welcome
+      <span className='user-email'>{currentUser?.username}</span>
+    </p>
+  ) : (
+    <p>
+      This page is protected. Please <Link to='/login'>Login</Link> or{' '}
+      <Link to='/signup'>Signup</Link>
+    </p>
+  );
 
   return (
     <div>
       <h4>Dashboard</h4>
-      <p>
-        Welcome
-        <span className='user-email'>{user?.username}</span>
-      </p>
+      {renderContent}
     </div>
   );
 }

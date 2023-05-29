@@ -46,6 +46,7 @@
     "webpack-dev-middleware": "^6.0.2"
   },
   "devDependencies": {
+    "apollo-client": "^2.6.10",
     "rimraf": "^5.0.1",
     "url-loader": "^4.1.1"
   }
