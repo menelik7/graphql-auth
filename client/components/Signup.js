@@ -9,9 +9,7 @@ import AuthForm from './AuthForm';
 export default function Signup() {
   const [errors, setErrors] = useState([]);
   const { updateCurrentUserInfo } = useContext(UserContext);
-  const [login, { loading }] = useMutation(mutation, {
-    refetchQueries: [{ query }],
-  });
+  const [login, { loading }] = useMutation(mutation);
   const navigate = useNavigate();
 
   const onSubmit = (email, password, username) => {
