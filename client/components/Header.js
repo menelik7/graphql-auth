@@ -1,29 +1,37 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import UserContext from '../context/user';
 import { useMutation, useQuery } from '@apollo/client';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import mutation from '../mutations/logout';
 import query from '../queries/CurrentUser';
+import Spinner from './Spinner';
 
 export default function Header() {
+  const [loading, setLoading] = useState(false);
   const [logout] = useMutation(mutation);
   const { refetch } = useQuery(query);
   const navigate = useNavigate();
   const { currentUser, updateCurrentUserInfo } = useContext(UserContext);
 
   const onLogout = () => {
+    setLoading(true);
     logout().then(async () => {
       await refetch();
       updateCurrentUserInfo(null);
+      setLoading(false);
       navigate('/login');
     });
   };
 
   const renderButtons = currentUser ? (
     <div onClick={onLogout}>
-      <li>
-        <Link to='dashboard'>Logout</Link>
-      </li>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <li>
+          <Link to='dashboard'>Logout</Link>
+        </li>
+      )}
     </div>
   ) : (
     <div>
