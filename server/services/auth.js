@@ -44,7 +44,6 @@ passport.use(
           return cb(err);
         }
         if (isMatch) {
-          console.log('From passport', user);
           return cb(null, user);
         }
 

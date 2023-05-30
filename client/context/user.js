@@ -6,7 +6,7 @@ const UserContext = createContext();
 
 export function Provider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
-  const { loading, error, data, refetch } = useQuery(query);
+  const { loading, error, data } = useQuery(query);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -16,7 +16,6 @@ export function Provider({ children }) {
   const userContextToShare = {
     currentUser: currentUser || user,
     updateCurrentUserInfo: (latestInfo) => {
-      refetch();
       setCurrentUser(latestInfo);
     },
   };
