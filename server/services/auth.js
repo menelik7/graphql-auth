@@ -28,7 +28,7 @@ passport.deserializeUser(async (id, cb) => {
 // log in.  We first find the user model in MongoDB that matches the submitted email,
 // then check to see if the provided password matches the saved password. There
 // are two obvious failure points here: the email might not exist in our DB or
-// the password might not match the saved one.  In either case, we call the 'done'
+// the password might not match the saved one.  In either case, we call the 'cb'
 // callback, including a string that messages why the authentication process failed.
 // This string is provided back to the GraphQL client.
 passport.use(
@@ -55,10 +55,9 @@ passport.use(
   })
 );
 
-// Creates a new user account.  We first check to see if a user already exists
-// with this email address to avoid making multiple accounts with identical addresses
-// If it does not, we save the existing user.  After the user is created, it is
-// provided to the 'req.logIn' function.  This is apart of Passport JS.
+// Creates a new user account.  mongoDB will check for uniqueness of credentials
+// prior to moving on to the creation of the user.  After the user is created, it is
+// provided to the 'req.logIn' function.  This is a part of Passport JS.
 // Notice the Promise created in the second 'then' statement.  This is done
 // because Passport only supports callbacks, while GraphQL only supports promises
 // for async code!  Awkward!
