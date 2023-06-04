@@ -6,13 +6,15 @@ import mutation from '../mutations/login';
 import AuthForm from './AuthForm';
 
 export default function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [errors, setErrors] = useState([]);
   const { updateCurrentUserInfo } = useContext(UserContext);
   const [login, { loading }] = useMutation(mutation);
 
   const navigate = useNavigate();
 
-  const onSubmit = (email, password) => {
+  const onSubmit = ([email, password]) => {
     login({
       variables: {
         email,
@@ -31,10 +33,20 @@ export default function Login() {
       });
   };
 
+  const formFields = [
+    { state: email, stateSetter: setEmail, type: 'email' },
+    { state: password, stateSetter: setPassword, type: 'password' },
+  ];
+
   return (
     <div>
       <h4>Log in</h4>
-      <AuthForm onSubmit={onSubmit} errors={errors} loading={loading} />
+      <AuthForm
+        onSubmit={onSubmit}
+        errors={errors}
+        loading={loading}
+        formFields={formFields}
+      />
     </div>
   );
 }

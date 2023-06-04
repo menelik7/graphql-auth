@@ -7,12 +7,15 @@ import mutation from '../mutations/signup';
 import AuthForm from './AuthForm';
 
 export default function Signup() {
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [errors, setErrors] = useState([]);
   const { updateCurrentUserInfo } = useContext(UserContext);
   const [login, { loading }] = useMutation(mutation);
   const navigate = useNavigate();
 
-  const onSubmit = (email, password, username) => {
+  const onSubmit = ([username, email, password]) => {
     login({
       variables: {
         username,
@@ -32,6 +35,12 @@ export default function Signup() {
       });
   };
 
+  const formFields = [
+    { state: username, stateSetter: setUsername, type: 'username' },
+    { state: email, stateSetter: setEmail, type: 'email' },
+    { state: password, stateSetter: setPassword, type: 'password' },
+  ];
+
   return (
     <div>
       <h4>Sign up</h4>
@@ -39,7 +48,7 @@ export default function Signup() {
         onSubmit={onSubmit}
         errors={errors}
         loading={loading}
-        usernameRequired
+        formFields={formFields}
       />
     </div>
   );

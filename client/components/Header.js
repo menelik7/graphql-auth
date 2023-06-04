@@ -29,17 +29,17 @@ export default function Header() {
         <Spinner />
       ) : (
         <li>
-          <Link to='dashboard'>Logout</Link>
+          <Link>Logout</Link>
         </li>
       )}
     </div>
   ) : (
     <div>
       <li>
-        <Link to='signup'>Sign up</Link>
+        <Link to="signup">Sign up</Link>
       </li>
       <li>
-        <Link to='login'>Log in</Link>
+        <Link to="login">Log in</Link>
       </li>
     </div>
   );
@@ -47,16 +47,16 @@ export default function Header() {
   return (
     <div>
       <nav>
-        <div className='nav-wrapper'>
+        <div className="nav-wrapper">
           <ul>
             <li>
-              <Link to='/'>Home</Link>
+              <Link to="/">Home</Link>
             </li>
             <li>
-              <Link to='dashboard'>Dashboard</Link>
+              <Link to="dashboard">Dashboard</Link>
             </li>
           </ul>
-          <ul className='right'>{renderButtons}</ul>
+          <ul className="right">{renderButtons}</ul>
         </div>
       </nav>
       <Outlet />
