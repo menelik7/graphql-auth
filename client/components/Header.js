@@ -23,13 +23,16 @@ export default function Header() {
     });
   };
 
+  const params = window.location.href.split("/");
+  const currentParam = params[params.length - 1] || "/";
+
   const renderButtons = currentUser ? (
     <div onClick={onLogout}>
       {loading ? (
         <Spinner />
       ) : (
         <li>
-          <Link>Logout</Link>
+          <Link to={currentParam}>Logout</Link>
         </li>
       )}
     </div>
