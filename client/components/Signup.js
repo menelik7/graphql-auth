@@ -2,7 +2,6 @@ import React, { useState, useContext } from 'react';
 import UserContext from '../context/user';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
-import query from '../queries/CurrentUser';
 import mutation from '../mutations/signup';
 import AuthForm from './AuthForm';
 
