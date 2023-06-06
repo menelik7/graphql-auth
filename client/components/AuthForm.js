@@ -9,9 +9,9 @@ export default function AuthForm({ onSubmit, errors, loading, formFields }) {
     onSubmit(formValues);
   };
 
-  const renderFormFields = formFields.map(({ state, stateSetter, type }, i) => {
+  const renderFormFields = formFields.map(({ state, stateSetter, type }) => {
     return (
-      <div className="input-field" key={i}>
+      <div className="input-field" key={type}>
         <input
           className={errors.length ? 'error-highlight' : ''}
           id={type}
