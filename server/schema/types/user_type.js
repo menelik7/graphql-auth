@@ -1,3 +1,5 @@
+// TODO - Add comments...
+
 const graphql = require('graphql');
 const { GraphQLObjectType, GraphQLString, GraphQLID } = graphql;
 
