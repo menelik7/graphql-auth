@@ -8,5 +8,3 @@ export default function Landing() {
     </div>
   );
 }
-
-// Running gpg key test - not working currently.
